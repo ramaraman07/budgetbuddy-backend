@@ -9,6 +9,8 @@ const expenseRoutes = require("./routes/expenses");
 dotenv.config();
 const app = express();
 
+const PORT = process.env.PORT || 5000;
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -25,8 +27,8 @@ mongoose
   })
   .then(() => {
     console.log("✅ MongoDB connected");
-    app.listen(5000, () => {
-      console.log("🚀 Server running on http://localhost:5000");
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => console.error("❌ MongoDB connection failed:", err));
