@@ -1,32 +1,35 @@
-// server/routes/expenses.js
 const express = require("express");
-const router = express.Router();
 const Expense = require("../models/Expense");
-const auth = require("../middleware/auth");
+const verifyToken = require("../middleware/auth");
 
-// @route   POST /api/expenses
-// @desc    Add a new expense
-// @access  Private
-router.post("/", auth, async (req, res) => {
+const router = express.Router();
+
+// Get all expenses
+router.get("/", verifyToken, async (req, res) => {
   try {
-    const { title, amount, category } = req.body;
+    const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
+    res.json(expenses);
+  } catch {
+    res.status(500).json({ error: "Failed to fetch expenses" });
+  }
+});
 
-    if (!title || !amount || !category) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+// Add expense
+router.post("/", verifyToken, async (req, res) => {
+  const { title, amount, date } = req.body;
 
+  try {
     const newExpense = new Expense({
-      user: req.userId,
+      userId: req.user.id,
       title,
       amount,
-      category,
+      date,
     });
 
     await newExpense.save();
-    res.status(201).json(newExpense);
-  } catch (err) {
-    console.error("❌ Add Expense Error:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(201).json({ message: "Expense added" });
+  } catch {
+    res.status(500).json({ error: "Failed to add expense" });
   }
 });
 
