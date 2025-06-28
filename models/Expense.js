@@ -1,7 +1,8 @@
+// server/models/Expense.js
 const mongoose = require("mongoose");
 
 const expenseSchema = new mongoose.Schema({
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -18,7 +19,7 @@ const expenseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
