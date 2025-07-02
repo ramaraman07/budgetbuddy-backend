@@ -6,13 +6,14 @@ const authMiddleware = require("../middleware/auth");
 // ➕ Create Expense
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, amount, category } = req.body;
+    const { title, amount, category, date } = req.body;
 
     const newExpense = new Expense({
       userId: req.user.id,
       title,
       amount,
       category,
+      date, // ✅ Save the date too
     });
 
     await newExpense.save();
@@ -50,11 +51,11 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 // ✏️ Update/Edit Expense
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const { title, amount, category } = req.body;
+    const { title, amount, category, date } = req.body;
 
     const updatedExpense = await Expense.findByIdAndUpdate(
       req.params.id,
-      { title, amount, category },
+      { title, amount, category, date },
       { new: true }
     );
 
