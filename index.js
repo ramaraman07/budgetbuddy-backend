@@ -21,8 +21,11 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected");
-    app.listen(10000, () => {
-      console.log("🚀 Server running on http://localhost:10000");
+
+    // Use Render assigned port or fallback to 5000 locally
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch((err) => console.error("❌ MongoDB connection failed:", err));
